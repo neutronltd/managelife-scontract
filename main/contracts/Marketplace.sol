@@ -45,6 +45,9 @@ contract Marketplace is ReentrancyGuard, Ownable, Pausable, IERC721Receiver {
     address public tokenUSDC;
     address public nftContract;
 
+    // 支持的支付代币集合
+    mapping(address => bool) public supportedTokens;
+
     event ListingCreated(
         address indexed seller,
         uint256 indexed tokenId,
@@ -67,6 +70,13 @@ contract Marketplace is ReentrancyGuard, Ownable, Pausable, IERC721Receiver {
     event RefundWithdrawn(address indexed paymentType, address indexed receiver, uint256 amount);
     event Paused();
     event Unpaused();
+    event ContractInitialized(
+        address nftContract,
+        address MLIFE,
+        address tokenUSDT,
+        address tokenUSDC,
+        string version
+    );
 
     modifier onlyNFTOwner(uint256 tokenId) {
         require(IERC721(nftContract).ownerOf(tokenId) == msg.sender, "Not NFT owner");
@@ -74,10 +84,7 @@ contract Marketplace is ReentrancyGuard, Ownable, Pausable, IERC721Receiver {
     }
 
     modifier validPaymentToken(address token) {
-        require(
-            token == address(0) || token == MLIFE || token == tokenUSDT || token == tokenUSDC,
-            "Unsupported payment token"
-        );
+        require(token == address(0) || supportedTokens[token], "Unsupported payment token");
         _;
     }
 
@@ -101,6 +108,16 @@ contract Marketplace is ReentrancyGuard, Ownable, Pausable, IERC721Receiver {
         MLIFE = _MLIFE;
         tokenUSDT = _tokenUSDT;
         tokenUSDC = _tokenUSDC;
+
+        // 初始化支持的支付代币
+        supportedTokens[MLIFE] = true;
+        supportedTokens[tokenUSDT] = true;
+        supportedTokens[tokenUSDC] = true;
+
+        // 添加版本号
+        string memory version = "1.0.0";
+        // 触发初始化完成事件
+        emit ContractInitialized(nftContract, MLIFE, tokenUSDT, tokenUSDC, version);
     }
 
     ///////////////////////
@@ -133,18 +150,27 @@ contract Marketplace is ReentrancyGuard, Ownable, Pausable, IERC721Receiver {
         require(newAddress != address(0), "Invalid address");
         emit MLifeTokenAddressUpdated(MLIFE, newAddress);
         MLIFE = newAddress;
+        if (newAddress != address(0)) {
+            supportedTokens[newAddress] = true;
+        }
     }
 
     function updateUsdtTokenAddress(address newAddress) external onlyOwner {
         require(newAddress != address(0), "Invalid address");
         emit UsdtAddressUpdated(tokenUSDT, newAddress);
         tokenUSDT = newAddress;
+        if (newAddress != address(0)) {
+            supportedTokens[newAddress] = true;
+        }
     }
 
     function updateUsdcTokenAddress(address newAddress) external onlyOwner {
         require(newAddress != address(0), "Invalid address");
         emit UsdcAddressUpdated(tokenUSDC, newAddress);
         tokenUSDC = newAddress;
+        if (newAddress != address(0)) {
+            supportedTokens[newAddress] = true;
+        }
     }
 
     function updateMaxFee(uint256 newMaxFee) external onlyOwner {
@@ -170,6 +196,17 @@ contract Marketplace is ReentrancyGuard, Ownable, Pausable, IERC721Receiver {
         adminsTokenEarnings[tokenAddress] = 0;
         IERC20(tokenAddress).safeTransfer(owner(), earnings);
         emit AdminTokenWithdrawals(owner(), tokenAddress, earnings);
+    }
+
+    function addSupportedToken(address token) external onlyOwner {
+        require(token != address(0), "Invalid token address");
+        require(!supportedTokens[token], "Token already supported");
+        supportedTokens[token] = true;
+    }
+
+    function removeSupportedToken(address token) external onlyOwner {
+        require(supportedTokens[token], "Token not supported");
+        delete supportedTokens[token];
     }
 
     ///////////////////////

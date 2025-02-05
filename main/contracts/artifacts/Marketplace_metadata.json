@@ -171,6 +171,43 @@
 				"anonymous": false,
 				"inputs": [
 					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "nftContract",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "MLIFE",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "tokenUSDT",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "tokenUSDC",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "version",
+						"type": "string"
+					}
+				],
+				"name": "ContractInitialized",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
 						"indexed": true,
 						"internalType": "uint256",
 						"name": "tokenId",
@@ -333,12 +370,6 @@
 			},
 			{
 				"anonymous": false,
-				"inputs": [],
-				"name": "Paused",
-				"type": "event"
-			},
-			{
-				"anonymous": false,
 				"inputs": [
 					{
 						"indexed": false,
@@ -347,6 +378,12 @@
 						"type": "address"
 					}
 				],
+				"name": "Paused",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [],
 				"name": "Paused",
 				"type": "event"
 			},
@@ -402,12 +439,6 @@
 			},
 			{
 				"anonymous": false,
-				"inputs": [],
-				"name": "Unpaused",
-				"type": "event"
-			},
-			{
-				"anonymous": false,
 				"inputs": [
 					{
 						"indexed": false,
@@ -416,6 +447,12 @@
 						"type": "address"
 					}
 				],
+				"name": "Unpaused",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [],
 				"name": "Unpaused",
 				"type": "event"
 			},
@@ -505,6 +542,19 @@
 					}
 				],
 				"name": "acceptBid",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "token",
+						"type": "address"
+					}
+				],
+				"name": "addSupportedToken",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -776,10 +826,42 @@
 				"type": "function"
 			},
 			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "token",
+						"type": "address"
+					}
+				],
+				"name": "removeSupportedToken",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
 				"inputs": [],
 				"name": "renounceOwnership",
 				"outputs": [],
 				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "supportedTokens",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -1045,7 +1127,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"0x81906929b10416a65A305d498267fE20adfC4746/contracts/Marketplace.sol": "Marketplace"
+			"main/contracts/Marketplace.sol": "Marketplace"
 		},
 		"evmVersion": "shanghai",
 		"libraries": {},
@@ -1059,14 +1141,6 @@
 		"remappings": []
 	},
 	"sources": {
-		"0x81906929b10416a65A305d498267fE20adfC4746/contracts/Marketplace.sol": {
-			"keccak256": "0x906b04ee016fe557f9534639639e018c5e301e3b29324e215b77bbfaf44c4fab",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://435677eebd32e6267cad8c3c158b93fc0738f712c4de3325fb45b80e9c49b4ed",
-				"dweb:/ipfs/QmePPtBVckRaLZR4KeFid3b2Ah2MhaNA4rmwrbXhvNJGrf"
-			]
-		},
 		"@openzeppelin/contracts/access/Ownable.sol": {
 			"keccak256": "0xff6d0bb2e285473e5311d9d3caacb525ae3538a80758c10649a4d61029b017bb",
 			"license": "MIT",
@@ -1161,6 +1235,14 @@
 			"urls": [
 				"bzz-raw://f6fda447a62815e8064f47eff0dd1cf58d9207ad69b5d32280f8d7ed1d1e4621",
 				"dweb:/ipfs/QmfDRc7pxfaXB2Dh9np5Uf29Na3pQ7tafRS684wd3GLjVL"
+			]
+		},
+		"main/contracts/Marketplace.sol": {
+			"keccak256": "0x38c78307b3395ca9f1d566b27c0fb7c5f5777feefbbfa0d2669d0c71b6bdc0d7",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://470a3194c4ecd138400dd3e3a90dc4a148f770af2d297a9a0e030fd1d8effd78",
+				"dweb:/ipfs/QmWpJ6wrQxEW9eZ8JojZghvKV88WfaQpV6fayJVsbDJBKD"
 			]
 		}
 	},
